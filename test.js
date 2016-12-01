@@ -57,9 +57,14 @@
   });
 
   var f = new F(42);
+  var g = new F(12);
   var h = new H(14, 42);
 
-  console.log(f.foo(5));
-  console.log(h.foo(5));
-  console.log(h.bar('Res', 5));
+  console.log('f.foo(5)', f.foo(5));
+  console.log('g.foo(5)', g.foo(5));
+  console.log('h.foo(5)', h.foo(5));
+  console.log('h.bar(\'Res\', 5)', h.bar('Res', 5));
+
+  console.log(F.foo(42));
+  // console.log(H.foo(42)); /* Nope ! Class functions are not inherited */
 })();

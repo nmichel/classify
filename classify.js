@@ -54,17 +54,25 @@
     clazz.prototype = new B;
     clazz.prototype.constructor = clazz;
 
-    var methods = desc.methods;
+    var methods = desc.methods || {};
     var props = {};
-    if (methods !== undefined && typeof methods === 'object') {
-      for (var m in methods) {
-        props[m] = {
-          enumerable: true,
-          value: buildWrapper(methods[m], m)
-        };
-      }
+    for (var m in methods) {
+      props[m] = {
+        enumerable: true,
+        value: buildWrapper(methods[m], m)
+      };
     }
     Object.defineProperties(clazz.prototype, props);
+
+    var functions = desc.functions || {};
+    var statics = {};
+    for (var m in functions) {
+      statics[m] = {
+        enumerable: true,
+        value: functions[m].bind(clazz)
+      };
+    }
+    Object.defineProperties(clazz, statics);
 
     return clazz;
   }
