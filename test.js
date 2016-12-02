@@ -43,7 +43,10 @@
 
     ctor: function(g, f) {
       this.super(g, f);
+      this.newProp = 'someValue';
     },
+
+    lockAfterCtor : true,
 
     methods: {
       foo: function(v) {
@@ -51,6 +54,7 @@
       },
 
       bar: function(t, v) {
+        this.newProperty = 32;
         return '' + t + ': ' + this.foo(v);
       }
     }
@@ -61,10 +65,17 @@
   var h = new H(14, 42);
 
   console.log('f.foo(5)', f.foo(5));
+
   console.log('g.foo(5)', g.foo(5));
+  g.anotherProp = 'anotherValue';
+  console.log('g.anotherProp', g.anotherProp);
+
   console.log('h.foo(5)', h.foo(5));
   console.log('h.bar(\'Res\', 5)', h.bar('Res', 5));
-
+  console.log('h.newProp', h.newProp);
+  h.anotherProp = 42;
+  console.log('h.anotherProp', h.anotherProp);
+  
   console.log(F.foo(42));
   // console.log(H.foo(42)); /* Nope ! Class functions are not inherited */
 })();
