@@ -20,10 +20,7 @@
         };
       }
 
-      return function() {
-        var params = [].splice.call(arguments, 0);
-        return fn.apply(this, params);
-      };
+      return fn;
     };
 
     var buildWrapper = function(what, name) {
