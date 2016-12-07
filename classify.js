@@ -42,15 +42,10 @@
     };
 
     var ctor = desc.ctor || defaultCtor;
-    var super_ = function() {
-      var params = [].splice.call(arguments, 0);
-      return B.apply(this, params);
-    };
-
     var clazz = function() {
       var params = [].splice.call(arguments, 0);
       var oldsuper = this.super;
-      this.super = super_;
+      this.super = B;
       ctor.apply(this, params);
       this.super = oldsuper;
     };
