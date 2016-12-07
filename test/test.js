@@ -1,7 +1,7 @@
 (function() {
   var buildClass = null;
   if (typeof require !== 'undefined') {
-    buildClass = require('./classify.js');
+    buildClass = require('../classify.js');
   } else if (typeof window !== 'undefined') {
     buildClass = window.buildClass;
   }
