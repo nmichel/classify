@@ -6,13 +6,19 @@
   function buildClass(desc) {
     var B = desc.extend || Object;
 
-    var buildSuper = function(name) {
+    var lookup = function(name) {
       var fn = undefined;
       var p = B.prototype;
       while (!fn && p) {
         fn = p[name];
         p = p.prototype;
       }
+
+      return fn;
+    };
+
+    var buildSuper = function(name) {
+      var fn = lookup(name);
 
       if (fn === undefined || typeof fn !== 'function') {
         return function() {
