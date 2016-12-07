@@ -31,7 +31,7 @@
   var buildWrapper = function(base, what, name) {
     var super_ = buildSuper(base, name);
     return function() {
-      var params = [].splice.call(arguments, 0);
+      var params = Array.prototype.slice.call(arguments);
       var oldsuper = this.super;
       this.super = super_;
       var r = what.apply(this, params);
@@ -40,39 +40,51 @@
     }
   };
 
-  function buildClass(desc) {
-    var B = desc.extend || Object;
-
-    var ctor = desc.ctor || defaultCtor;
+  var buildCtorFunction = function(base, ctor) {
     var clazz = function() {
-      var params = [].splice.call(arguments, 0);
+      var params = Array.prototype.slice.call(arguments);
       var oldsuper = this.super;
-      this.super = B;
+      this.super = base;
       ctor.apply(this, params);
       this.super = oldsuper;
     };
-    clazz.prototype = new B;
+    clazz.prototype = new base;
     clazz.prototype.constructor = clazz;
 
-    var methods = desc.methods || {};
+    return clazz;
+  };
+
+  var attachMethods = function(base, clazz, methods) {
     var props = {};
     for (var m in methods) {
       props[m] = {
         enumerable: true,
-        value: buildWrapper(B, methods[m], m)
+        value: buildWrapper(base, methods[m], m)
       };
     }
     Object.defineProperties(clazz.prototype, props);
+  };
 
-    var functions = desc.functions || {};
-    var statics = {};
+  var attachFunctions = function(clazz, functions) {
+    var props = {};
     for (var m in functions) {
-      statics[m] = {
+      props[m] = {
         enumerable: true,
         value: functions[m].bind(clazz)
       };
     }
-    Object.defineProperties(clazz, statics);
+    Object.defineProperties(clazz, props);
+  };
+
+  var buildClass = function(desc) {
+    var base = desc.extend || Object;
+    var ctor = desc.ctor || defaultCtor;
+    var methods = desc.methods || {};
+    var functions = desc.functions || {};
+
+    var clazz = buildCtorFunction(base, ctor);
+    attachMethods(base, clazz, methods);
+    attachFunctions(clazz, functions);
 
     return clazz;
   }
