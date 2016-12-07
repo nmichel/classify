@@ -36,7 +36,6 @@
     };
 
     var ctor = desc.ctor || defaultCtor;
-    var lockState = (desc.lockAfterCtor === true);
     var super_ = function() {
       var params = [].splice.call(arguments, 0);
       return B.apply(this, params);
@@ -48,9 +47,6 @@
       this.super = super_;
       ctor.apply(this, params);
       this.super = oldsuper;
-      if (lockState) {
-        Object.seal(this);
-      }
     };
     clazz.prototype = new B;
     clazz.prototype.constructor = clazz;

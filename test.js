@@ -46,8 +46,6 @@
       this.newProp = 'someValue';
     },
 
-    lockAfterCtor : true,
-
     methods: {
       foo: function(v) {
         return this.super(v) * 4;
